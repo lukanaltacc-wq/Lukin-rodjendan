@@ -36,11 +36,6 @@ h1,h2,h3,.num{font-family:'Outfit',sans-serif}
 #flash.go{animation:flashA .6s ease-out forwards}
 @keyframes flashA{0%{opacity:.95}100%{opacity:0}}
 #burst{position:fixed;inset:0;z-index:998;pointer-events:none;overflow:hidden}
-#gate .emoji-top{font-size:clamp(2.4rem,7vw,3.6rem);display:inline-block;animation:bob 2.4s ease-in-out infinite;filter:drop-shadow(0 0 22px rgba(255,78,205,.6))}
-@keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-14px) rotate(5deg)}}
-#gate .badge12{display:inline-block;margin:1.3rem 0 0;padding:.45rem 1.3rem;border-radius:999px;
-  border:1px solid rgba(34,228,255,.45);background:rgba(34,228,255,.08);
-  color:var(--cyan);font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;box-shadow:0 0 24px rgba(34,228,255,.25)}
 #gate h1{font-size:clamp(3.4rem,12vw,6.5rem);font-weight:900;line-height:1;letter-spacing:.02em;margin:.9rem 0 .7rem}
 #gate .tag{color:var(--muted);font-size:1.05rem;max-width:430px;margin:0 auto;line-height:1.7}
 #gate .meta{margin:1.4rem 0 2rem;display:flex;align-items:center;justify-content:center;gap:.7rem;flex-wrap:wrap;
@@ -205,11 +200,9 @@ footer .mini{margin-top:2.2rem;font-size:.56rem;letter-spacing:.46em;text-transf
 </head>
 <body>
 
-<!-- ===== GATE ===== -->
+<!-- ===== GATE (bez ikonice iznad naslova) ===== -->
 <div id="gate">
   <div>
-    <span class="emoji-top">🎂</span><br>
-    <span class="badge12">12. Rođendan</span>
     <h1><span class="grad">LUKA</span></h1>
     <p class="tag">Sprema se najveća žurka godine — i ti si pozvan! 🎮⚡</p>
     <div class="meta"><span>5. septembar</span><span class="dot"></span><span>17:00h</span><span class="dot"></span><span>Kragujevac</span></div>
