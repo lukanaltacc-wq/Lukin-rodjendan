@@ -22,6 +22,16 @@ h1,h2,h3,.num{font-family:'Outfit',sans-serif}
   -webkit-background-clip:text;background-clip:text;color:transparent}
 .micro{font-size:.66rem;letter-spacing:.38em;text-transform:uppercase;color:var(--muted);font-weight:600}
 
+/* ===== ICON NUKE — force-hide any stray icon/image injected into the page ===== */
+#gate img,#gate svg,#gate canvas,#gate [role="img"],
+.hero img,.hero svg,.hero canvas,.hero [role="img"],
+.ticket img,.ticket svg,.ticket canvas,.ticket [role="img"],
+#gate [class*="icon"],#gate [class*="badge"],#gate [class*="emoji"],
+.ticket [class*="icon"],.ticket [class*="badge"],.ticket [class*="emoji"]{
+  display:none !important;visibility:hidden !important;
+  width:0 !important;height:0 !important;opacity:0 !important;pointer-events:none !important;
+}
+
 /* ===== GATE ===== */
 #gate{position:fixed;inset:0;z-index:999;display:grid;place-items:center;text-align:center;
   background:
@@ -200,7 +210,7 @@ footer .mini{margin-top:2.2rem;font-size:.56rem;letter-spacing:.46em;text-transf
 </head>
 <body>
 
-<!-- ===== GATE (bez ikonice iznad naslova) ===== -->
+<!-- ===== GATE ===== -->
 <div id="gate">
   <div>
     <h1><span class="grad">LUKA</span></h1>
@@ -315,6 +325,45 @@ footer .mini{margin-top:2.2rem;font-size:.56rem;letter-spacing:.46em;text-transf
 
 <script>
 (function(){
+  /* ===== ICON GUARD — force-remove anything injected into the DOM ===== */
+  (function iconGuard(){
+    function kill(n){
+      try{
+        n.style.setProperty('display','none','important');
+        n.style.setProperty('visibility','hidden','important');
+        n.style.setProperty('pointer-events','none','important');
+      }catch(e){}
+    }
+    function isForeign(n){
+      if(!n || !n.tagName) return false;
+      var ownIds=['gate','flash','burst','page'];
+      if(n.id && ownIds.indexOf(n.id)>-1) return false;
+      if(n.tagName==='SCRIPT'||n.tagName==='STYLE'||n.tagName==='NOSCRIPT'||n.tagName==='FOOTER') return false;
+      if(n.closest && n.closest('#gate,#page,footer')) return false;
+      return true;
+    }
+    function scan(){
+      /* kill any img/svg/canvas/role=img anywhere (this page uses none legitimately) */
+      document.querySelectorAll('img,svg,canvas,[role="img"],embed,object').forEach(kill);
+      /* kill injected top-level overlay boxes that are empty and small (icon-like) */
+      Array.prototype.forEach.call(document.body.children,function(n){
+        if(!isForeign(n)) return;
+        var isMedia=n.tagName==='IMG'||n.tagName==='SVG'||n.tagName==='CANVAS';
+        var emptyBox=false;
+        try{
+          var r=n.getBoundingClientRect();
+          emptyBox=r.width>0&&r.width<=180&&r.height>0&&r.height<=180&&!n.textContent.trim()&&n.childElementCount===0;
+        }catch(e){}
+        if(isMedia||emptyBox) kill(n);
+      });
+    }
+    scan();
+    if(window.MutationObserver){
+      var mo=new MutationObserver(function(){scan();});
+      mo.observe(document.body,{childList:true,subtree:true});
+    }
+  })();
+
   var clamp=function(v,a,b){return Math.min(b,Math.max(a,v));};
   var smooth=function(t){return t*t*(3-2*t);};
   var pad=function(n){return String(n).padStart(2,'0');};
@@ -428,7 +477,6 @@ footer .mini{margin-top:2.2rem;font-size:.56rem;letter-spacing:.46em;text-transf
       sceneEl.style.setProperty('--ry','0deg');sceneEl.style.setProperty('--rx','0deg');
     });
   }
-  /* pozivnica: hover ceo hero */
   (function(){
     var hx=document.querySelector('.hero-pin');
     hx.addEventListener('pointermove',function(e){
